@@ -11,12 +11,12 @@
 	<properties>
 		<!-- Project -->
 		<jetty-maven-plugin.version>9.4.8.v20171121</jetty-maven-plugin.version>
-		<jetty.http.port>8090</jetty.http.port>
+		<jetty.http.port>8080</jetty.http.port>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-war-plugin.version>3.2.0</maven-war-plugin.version>
 		<servlet-version>3.1.0</servlet-version>
 		<jackson-version>2.9.4</jackson-version>
-		<fabric8.version>3.5.38</fabric8.version>
+		<fabric8.version>2.3.7</fabric8.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -96,7 +96,7 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.13.9</version>
+				<version>0.25.2</version>
 				<configuration>
 					<images>
 						<image>
