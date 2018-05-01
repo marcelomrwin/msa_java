@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 	<prerequisites>
 		<maven>3.0.0</maven>
@@ -15,10 +15,37 @@
 	<name>HolaDropwizard</name>
 
 	<properties>
+		<!-- Project -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<dropwizard.version>1.2.4</dropwizard.version>
+		<fabric8.version>2.3.7</fabric8.version>
 		<mainClass>com.redhat.examples.dropwizard.HolaDropwizardApplication</mainClass>
+
+		<!-- Docker -->
+		<docker.assemblyDescriptorRef>artifact-with-dependencies</docker.assemblyDescriptorRef>
+		<docker.from>docker.io/fabric8/java-jboss-openjdk8-jdk:1.4.0</docker.from>
+		<docker.image>fabric8/${project.artifactId}:${project.version}</docker.image>
+		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
+
+		<!-- Fabric8/Kubernetes/OpenShift -->
+		<fabric8.readinessProbe.httpGet.path>/api/hola</fabric8.readinessProbe.httpGet.path>
+		<fabric8.readinessProbe.httpGet.port>8080</fabric8.readinessProbe.httpGet.port>
+		<fabric8.readinessProbe.initialDelaySeconds>5</fabric8.readinessProbe.initialDelaySeconds>
+		<fabric8.readinessProbe.timeoutSeconds>30</fabric8.readinessProbe.timeoutSeconds>
+		<fabric8.service.name>${project.artifactId}</fabric8.service.name>
+		<fabric8.service.port>80</fabric8.service.port>
+		<fabric8.service.containerPort>8080</fabric8.service.containerPort>
+		<fabric8.service.type>LoadBalancer</fabric8.service.type>
+		<fabric8.label.group>msa</fabric8.label.group>
+		<fabric8.iconRef>dropwizard</fabric8.iconRef>
+
+		<fabric8.env.AB_JOLOKIA_OFF>true</fabric8.env.AB_JOLOKIA_OFF>
+		<fabric8.env.AB_OFF>true</fabric8.env.AB_OFF>
+		<fabric8.env.GREETER_BACKEND_HOST>backend</fabric8.env.GREETER_BACKEND_HOST>
+		<fabric8.env.GREETER_BACKEND_PORT>80</fabric8.env.GREETER_BACKEND_PORT>
+
+		<fabric8.env.USE_KUBERNETES_DISCOVERY>true</fabric8.env.USE_KUBERNETES_DISCOVERY>
 	</properties>
 
 	<dependencyManagement>
@@ -47,8 +74,23 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<configuration>
+					<mainClass>
+						com.redhat.examples.dropwizard.HolaDropwizardApplication
+					</mainClass>
+					<arguments>
+						<argument>server</argument>
+						<argument>conf/application.yml</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.1</version>
+				<version>3.1.1</version>
 				<configuration>
 					<createDependencyReducedPom>true</createDependencyReducedPom>
 					<transformers>
@@ -82,7 +124,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.1.0</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -94,7 +136,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>3.7.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -102,7 +144,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -114,7 +156,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -125,18 +167,60 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.25.2</version>
 				<configuration>
-					<mainClass>
-						com.redhat.examples.dropwizard.HolaDropwizardApplication
-					</mainClass>
-					<arguments>
-						<argument>server</argument>
-						<argument>conf/application.yml</argument>
-					</arguments>
+					<images>
+						<image>
+							<name>${docker.image}</name>
+							<build>
+								<from>${docker.from}</from>
+								<cmd><![CDATA[/deployments/run-java.sh server /deployments/application.yml]]></cmd>
+								<assembly>
+									<basedir>/deployments</basedir>
+									<inline>
+										<id>${project.artifactId}</id>
+										<files>
+											<file>
+												<source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
+												<outputDirectory>/</outputDirectory>
+											</file>
+											<file>
+												<source>${basedir}/conf/application.yml</source>
+												<outputDirectory>/</outputDirectory>
+											</file>
+										</files>
+									</inline>
+								</assembly>
+								<env>
+									<JAVA_APP_JAR>${project.artifactId}-${project.version}.jar</JAVA_APP_JAR>
+								</env>
+							</build>
+						</image>
+					</images>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>fabric8-maven-plugin</artifactId>
+				<version>${fabric8.version}</version>
+				<executions>
+					<execution>
+						<id>json</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>json</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>attach</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -145,7 +229,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.8.1</version>
+				<version>2.9</version>
 				<configuration>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
@@ -153,8 +237,36 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
+				<version>3.0.0</version>
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<profiles>
+		<profile>
+			<id>f8-build</id>
+			<build>
+				<defaultGoal>clean install docker:build fabric8:json</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>f8-deploy</id>
+			<build>
+				<defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
+			</build>
+			<properties>
+				<fabric8.recreate>true</fabric8.recreate>
+				<fabric8.imagePullPolicySnapshot>Always</fabric8.imagePullPolicySnapshot>
+			</properties>
+		</profile>
+		<profile>
+			<id>f8-local-deploy</id>
+			<build>
+				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
+			</build>
+			<properties>
+				<fabric8.recreate>true</fabric8.recreate>
+			</properties>
+		</profile>
+	</profiles>
 </project>
