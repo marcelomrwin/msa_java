@@ -133,7 +133,7 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>fabric8-maven-plugin</artifactId>
-				<version>2.2.100</version>
+				<version>2.3.7</version>
 				<executions>
 					<execution>
 						<id>json</id>

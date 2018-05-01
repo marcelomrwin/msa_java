@@ -21,7 +21,7 @@ public class GreeterResource {
 	private String backendServiceHost;
 
 	@Inject
-	@ConfigProperty(name = "GREETING_BACKEND_SERVICE_PORT", defaultValue = "8090")
+	@ConfigProperty(name = "GREETING_BACKEND_SERVICE_PORT", defaultValue = "8080")
 	private int backendServicePort;
 
 	@Path("/greeting")
@@ -32,6 +32,15 @@ public class GreeterResource {
 		Client client = ClientBuilder.newClient();
 		BackendDTO backendDTO = client.target(backendServiceUrl).path("api").path("backend")
 				.queryParam("greeting", saying).request(MediaType.APPLICATION_JSON_TYPE).get(BackendDTO.class);
+		return backendDTO.getGreeting() + " at host: " + backendDTO.getIp();
+	}
+
+	@Path("/greeting-hystrix")
+	@GET
+	public String greetingHystrix() {
+
+		BackendCommand command = new BackendCommand(backendServiceHost, backendServicePort).withSaying(saying);
+		BackendDTO backendDTO = command.execute();
 		return backendDTO.getGreeting() + " at host: " + backendDTO.getIp();
 	}
 }
