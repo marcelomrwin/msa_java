@@ -36,6 +36,10 @@
 		<fabric8.service.type>LoadBalancer</fabric8.service.type>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+
+		<fabric8.env.GREETING_BACKENDSERVICEHOST>backend</fabric8.env.GREETING_BACKENDSERVICEHOST>
+		<fabric8.env.GREETING_BACKENDSERVICEPORT>80</fabric8.env.GREETING_BACKENDSERVICEPORT>
+
 	</properties>
 
 	<profiles>
@@ -106,7 +110,7 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.14.2</version>
+				<version>0.25.2</version>
 				<configuration>
 					<images>
 						<image>
