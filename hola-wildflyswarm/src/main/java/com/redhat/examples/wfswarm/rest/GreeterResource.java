@@ -21,7 +21,7 @@ public class GreeterResource {
 	private String backendServiceHost;
 
 	@Inject
-	@ConfigProperty(name = "GREETING_BACKEND_SERVICE_PORT", defaultValue = "8090")
+	@ConfigProperty(name = "GREETING_BACKEND_SERVICE_PORT", defaultValue = "8080")
 	private int backendServicePort;
 
 	@Path("/greeting")

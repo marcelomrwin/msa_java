@@ -21,7 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<docker.assemblyDescriptorRef>artifact</docker.assemblyDescriptorRef>
-		<docker.from>docker.io/fabric8/java-jboss-openjdk8-jdk:1.0.10</docker.from>
+		<docker.from>docker.io/fabric8/java-jboss-openjdk8-jdk:1.4.0</docker.from>
 		<docker.image>fabric8/${project.artifactId}:${project.version}</docker.image>
 		<docker.port.container.http>8080</docker.port.container.http>
 		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
@@ -118,7 +118,7 @@
 							<build>
 								<from>${docker.from}</from>
 								<assembly>
-									<basedir>/app</basedir>
+									<basedir>/deployments</basedir>
 									<descriptorRef>${docker.assemblyDescriptorRef}</descriptorRef>
 								</assembly>
 								<env>
