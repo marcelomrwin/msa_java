@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 
 import com.codahale.metrics.annotation.Timed;
+import com.redhat.examples.dropwizard.api.BackendCommand;
 import com.redhat.examples.dropwizard.api.BackendDTO;
 
 @Path("/api")
@@ -29,6 +30,15 @@ public class GreeterRestResource {
 		System.out.println("Sending to: " + backendServiceUrl);
 		BackendDTO backendDTO = client.target(backendServiceUrl).path("api").path("backend")
 				.queryParam("greeting", saying).request().accept("application/json").get(BackendDTO.class);
+		return backendDTO.getGreeting() + " at host: " + backendDTO.getIp();
+	}
+
+	@Path("/greeting-hystrix")
+	@GET
+	@Timed
+	public String greetingHystrix() {
+		BackendCommand command = new BackendCommand(backendServiceHost, backendServicePort).withSaying(saying);
+		BackendDTO backendDTO = command.execute();
 		return backendDTO.getGreeting() + " at host: " + backendDTO.getIp();
 	}
 }

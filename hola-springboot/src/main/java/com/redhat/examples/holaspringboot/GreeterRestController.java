@@ -28,6 +28,14 @@ public class GreeterRestController {
 		return response.getGreeting() + " at host: " + response.getIp();
 	}
 
+	@RequestMapping(value = "/greeting-hystrix", method = RequestMethod.GET, produces = "text/plain")
+    public String greetingHystrix() {
+        BackendCommand backendCommand = new BackendCommand(backendServiceHost, backendServicePort)
+                .withSaying(saying).withTemplate(template);
+        BackendDTO response = backendCommand.execute();
+        return response.getGreeting() + " at host: " + response.getIp();
+    }
+	
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate template = new RestTemplate();
