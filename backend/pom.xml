@@ -126,6 +126,15 @@
 			</build>
 		</profile>
 		<profile>
+			<id>f8-local-deploy</id>
+			<build>
+				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
+			</build>
+			<properties>
+				<fabric8.recreate>true</fabric8.recreate>
+			</properties>
+		</profile>
+		<profile>
 			<id>f8-deploy</id>
 			<build>
 				<defaultGoal>clean install docker:build docker:push fabric8:json fabric8:apply</defaultGoal>
@@ -133,15 +142,6 @@
 			<properties>
 				<fabric8.recreate>true</fabric8.recreate>
 				<fabric8.imagePullPolicySnapshot>Always</fabric8.imagePullPolicySnapshot>
-			</properties>
-		</profile>
-		<profile>
-			<id>f8-local-deploy</id>
-			<build>
-				<defaultGoal>clean install docker:build fabric8:json fabric8:apply</defaultGoal>
-			</build>
-			<properties>
-				<fabric8.recreate>true</fabric8.recreate>
 			</properties>
 		</profile>
 	</profiles>
