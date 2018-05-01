@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.redhat.examples.wfswarm</groupId>
 	<artifactId>hola-wildflyswarm</artifactId>
@@ -11,7 +13,8 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.wildfly-swarm>2018.3.3</version.wildfly-swarm>
+		<version.wildfly-swarm>2018.4.1</version.wildfly-swarm>
+		<deltaspike.version>1.8.1</deltaspike.version>
 	</properties>
 
 	<dependencyManagement>
@@ -24,7 +27,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>bom-all</artifactId>
+				<artifactId>bom</artifactId>
 				<version>${version.wildfly-swarm}</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -39,19 +42,14 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs-cdi</artifactId>
-			<version>${version.wildfly-swarm}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-api</artifactId>
-			<version>1.8.1</version>
+			<version>${deltaspike.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-impl</artifactId>
-			<version>1.8.1</version>
+			<version>${deltaspike.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
@@ -62,9 +60,10 @@
 			<artifactId>cdi</artifactId>
 		</dependency>
 		<dependency>
-      <groupId>org.wildfly.swarm</groupId>
-      <artifactId>monitor</artifactId>
-    </dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>monitor</artifactId>
+			<version>${version.wildfly-swarm}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
