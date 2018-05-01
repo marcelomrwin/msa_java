@@ -108,7 +108,7 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-			</plugin>
+			</plugin>			
 			<plugin>
 				<groupId>org.wildfly.swarm</groupId>
 				<artifactId>wildfly-swarm-plugin</artifactId>
@@ -149,7 +149,7 @@
 									</inline>
 								</assembly>
 								<env>
-									<JAVA_APP_JAR>${project.build.finalName}-swarm.jar</JAVA_APP_JAR>									
+									<JAVA_APP_JAR>${project.build.finalName}-swarm.jar</JAVA_APP_JAR>
 								</env>
 							</build>
 						</image>
