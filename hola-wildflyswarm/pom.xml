@@ -17,6 +17,8 @@
 		<hystrix.version>1.5.12</hystrix.version>
 		<deltaspike.version>1.8.1</deltaspike.version>
 		<fabric8.version>2.3.7</fabric8.version>
+		<ribbon.version>2.3.0</ribbon.version>
+		<kubeflix.version>1.0.28</kubeflix.version>
 
 		<!-- Docker -->
 		<docker.maven.plugin.version>0.25.2</docker.maven.plugin.version>
@@ -42,6 +44,7 @@
 		<fabric8.env.GREETING_BACKEND_SERVICE_HOST>backend</fabric8.env.GREETING_BACKEND_SERVICE_HOST>
 		<fabric8.env.GREETING_BACKEND_SERVICE_PORT>80</fabric8.env.GREETING_BACKEND_SERVICE_PORT>
 		<fabric8.env.USE_KUBERNETES_DISCOVERY>true</fabric8.env.USE_KUBERNETES_DISCOVERY>
+		<fabric8.serviceAccount>ribbon</fabric8.serviceAccount>
 	</properties>
 
 	<dependencyManagement>
@@ -97,6 +100,15 @@
 			<version>${hystrix.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>ribbon</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.fabric8.kubeflix</groupId>
+			<artifactId>ribbon-discovery</artifactId>
+			<version>${kubeflix.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -108,7 +120,7 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.wildfly.swarm</groupId>
 				<artifactId>wildfly-swarm-plugin</artifactId>

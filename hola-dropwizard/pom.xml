@@ -40,13 +40,15 @@
 		<fabric8.service.type>LoadBalancer</fabric8.service.type>
 		<fabric8.label.group>msa</fabric8.label.group>
 		<fabric8.iconRef>dropwizard</fabric8.iconRef>
-
 		<fabric8.env.AB_JOLOKIA_OFF>true</fabric8.env.AB_JOLOKIA_OFF>
 		<fabric8.env.AB_OFF>true</fabric8.env.AB_OFF>
 		<fabric8.env.GREETER_BACKEND_HOST>backend</fabric8.env.GREETER_BACKEND_HOST>
 		<fabric8.env.GREETER_BACKEND_PORT>80</fabric8.env.GREETER_BACKEND_PORT>
-
 		<fabric8.env.USE_KUBERNETES_DISCOVERY>true</fabric8.env.USE_KUBERNETES_DISCOVERY>
+		<ribbon.version>2.3.0</ribbon.version>
+		<kubeflix.version>1.0.28</kubeflix.version>
+		<fabric8.serviceAccount>ribbon</fabric8.serviceAccount>
+
 	</properties>
 
 	<dependencyManagement>
@@ -79,6 +81,22 @@
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-metrics-event-stream</artifactId>
 			<version>${hystrix.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.netflix.ribbon</groupId>
+			<artifactId>ribbon-core</artifactId>
+			<version>${ribbon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.ribbon</groupId>
+			<artifactId>ribbon-loadbalancer</artifactId>
+			<version>${ribbon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.fabric8.kubeflix</groupId>
+			<artifactId>ribbon-discovery</artifactId>
+			<version>${kubeflix.version}</version>
 		</dependency>
 	</dependencies>
 
