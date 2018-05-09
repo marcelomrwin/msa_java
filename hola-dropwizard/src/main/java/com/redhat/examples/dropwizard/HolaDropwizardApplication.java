@@ -33,6 +33,8 @@ public class HolaDropwizardApplication extends Application<HolaDropwizardConfigu
 
 	@Override
 	public void run(final HolaDropwizardConfiguration configuration, final Environment environment) {
+		
+		//hola service
 		environment.jersey().register(new HolaRestResource(configuration.getSayingFactory().getSaying()));
 
 		// greeter service

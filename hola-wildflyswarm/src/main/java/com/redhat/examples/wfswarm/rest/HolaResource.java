@@ -8,7 +8,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 
-@Path("/api/hola")
+import io.swagger.annotations.ApiOperation;
+
+@Path("/hola")
 public class HolaResource {
 
 	@Inject
@@ -17,6 +19,7 @@ public class HolaResource {
 
 	@GET
 	@Produces("text/plain")
+	@ApiOperation("Returns the greeting Hola!!")
 	public Response doGet() {
 		return Response.ok(saying + " from WF Swarm").build();
 	}

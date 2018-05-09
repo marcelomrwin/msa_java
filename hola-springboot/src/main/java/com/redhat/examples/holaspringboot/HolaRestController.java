@@ -4,9 +4,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
@@ -15,7 +18,9 @@ public class HolaRestController {
 
 	private String saying;
 
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET, value = "/hola", produces = "text/plain")
+	@ApiOperation("Returns the greeting hola")
 	public String hola() throws UnknownHostException {
 		String hostname = null;
 		try {
