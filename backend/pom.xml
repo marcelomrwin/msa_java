@@ -23,7 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Docker -->
-		<docker.from>fabric8/tomcat-8</docker.from>
+		<docker.from>fabric8/tomcat-9</docker.from>
 		<docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
 		<docker.assemblyDescriptorRef>rootWar</docker.assemblyDescriptorRef>
 		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
